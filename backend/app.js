@@ -98,7 +98,8 @@ app.post('/opinions/:id/upvote', async (req, res) => {
 
 app.post('/opinions/:id/downvote', async (req, res) => {
   const { id } = req.params;
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));    // simulates slow backend response
+
   try {
     const opinion = await downvoteOpinion(Number(id));
     if (!opinion) {
@@ -114,3 +115,8 @@ app.post('/opinions/:id/downvote', async (req, res) => {
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
 });
+
+
+// node app.js   <- to start the backend server
+
+// npm run dev  --> to start frontend server at localhost:5173

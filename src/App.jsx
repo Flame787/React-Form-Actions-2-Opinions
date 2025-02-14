@@ -18,3 +18,8 @@ function App() {
 }
 
 export default App;
+
+
+// npm run dev  --> to start frontend server at localhost:5173
+
+// node app.js  --> to start the backend server at localhost:3000
