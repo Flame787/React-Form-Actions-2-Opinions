@@ -1,8 +1,17 @@
-import { useActionState } from "react";
+import { useActionState, use } from "react";
+import { OpinionsContext } from "../store/opinions-context";
+import Submit from "./Submit";
 
 export function NewOpinion() {
-  function shareOpinionAction(prevState, formData) {
+  const ctx = use(OpinionsContext);
+  const { addOpinion } = use(OpinionsContext);
+  // use-hook works in React 19 and newer versions
+  // use-hook can be used to access some context
+  // destructuring the ctx-object -> function { addOpinion }
+
+  async function shareOpinionAction(prevState, formData) {
     // add prevState as 1st argument, even if not using it currently
+    // added 'async' because we use 'await' later:  await addOpinion({ title, body, userName });
     const title = formData.get("title");
     const userName = formData.get("userName");
     const body = formData.get("body");
@@ -31,13 +40,21 @@ export function NewOpinion() {
       };
     }
 
-    // submit to backend
+    // submit to backend - calling the async function addOpinion(), provided by Context:
+    await addOpinion({ title, body, userName });
+    // passing an object, with properties: title, body, userName (all 'stats' of which one 'opinion' consists)
+    // added 'await', so that we clear the form only after the data has been submitted (it 'awaits' on addOpinion to finish)
 
     // clear the form - return new form-state object, reset errors to null:
     return { errors: null };
   }
 
   // new hook:
+  // const [formState, formAction, pending] = useActionState(shareOpinionAction, {
+  //   errors: null,
+  // });
+  // pending - 3rd array element, sometimes used to await, until operation is finished... - but not explained here.
+
   const [formState, formAction] = useActionState(shareOpinionAction, {
     errors: null,
   });
@@ -45,7 +62,7 @@ export function NewOpinion() {
   return (
     <div id="new-opinion">
       <h2>Share your opinion!</h2>
-      <form action={formAction}>   
+      <form action={formAction}>
         <div className="control-row">
           <p className="control">
             <label htmlFor="userName">Your Name</label>
@@ -53,7 +70,7 @@ export function NewOpinion() {
               type="text"
               id="userName"
               name="userName"
-              defaultValue={formState.enteredValues?.userName} 
+              defaultValue={formState.enteredValues?.userName}
               // for keeping entered values, in case of some other error(s) - when submit is not yet possible
             />
           </p>
@@ -87,9 +104,12 @@ export function NewOpinion() {
           </ul>
         )}
 
-        <p className="actions">
+        {/* <p className="actions">
           <button type="submit">Submit</button>
-        </p>
+        </p> */}
+        {/* transferred into new component: Submit.jsx */}
+
+        <Submit />
       </form>
     </div>
   );

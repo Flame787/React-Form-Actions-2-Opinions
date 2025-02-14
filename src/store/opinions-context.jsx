@@ -62,6 +62,7 @@ export function OpinionsContextProvider({ children }) {
     });
   }
 
+  // enabled for every component taht needs it, through contextValue:
   const contextValue = {
     opinions: opinions,
     addOpinion,
@@ -95,3 +96,6 @@ Vraćanje JSX-a: OpinionsContextProvider vraća JSX koji omogućava pristup kont
 Ovaj kontekst omogućava bilo kojoj komponenti unutar svog stabla da pristupi i ažurira mišljenja bez potrebe za direktnim prosleđivanjem propsa kroz svaki nivo komponente.
 
 */
+
+
+
