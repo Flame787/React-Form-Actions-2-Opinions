@@ -40,7 +40,18 @@ export function OpinionsContextProvider({ children }) {
     setOpinions((prevOpinions) => [savedOpinion, ...prevOpinions]);
   }
 
-  function upvoteOpinion(id) {
+  // adjusting code for sending upvote/downvote info to backend: turning this function into async-await function:
+  async function upvoteOpinion(id) {
+    const response = await fetch("http://localhost:3000/opinions/" + id + "/upvote", {
+      method: "POST",
+    });
+    // adding fetch-request to backend-endpoint.
+    // Concatinating the endpoint-link so it contains specific id of the selected opinion.
+
+    if (!response.ok) {
+      return;
+    }
+
     setOpinions((prevOpinions) => {
       return prevOpinions.map((opinion) => {
         if (opinion.id === id) {
@@ -51,7 +62,15 @@ export function OpinionsContextProvider({ children }) {
     });
   }
 
-  function downvoteOpinion(id) {
+  async function downvoteOpinion(id) {
+    const response = await fetch("http://localhost:3000/opinions/" + id + "/downvote", {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
     setOpinions((prevOpinions) => {
       return prevOpinions.map((opinion) => {
         if (opinion.id === id) {
@@ -96,6 +115,3 @@ Vraćanje JSX-a: OpinionsContextProvider vraća JSX koji omogućava pristup kont
 Ovaj kontekst omogućava bilo kojoj komponenti unutar svog stabla da pristupi i ažurira mišljenja bez potrebe za direktnim prosleđivanjem propsa kroz svaki nivo komponente.
 
 */
-
-
-

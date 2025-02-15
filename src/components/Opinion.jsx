@@ -1,4 +1,26 @@
+// single opinion on the list, each has it's own brown quadrant: opinion-title, author/name, and a statement.
+// under each opinion there are 2 buttons: upvote, downvote and between them, number/state of current votes
+
+import { use } from "react";
+
+import { OpinionsContext } from "../store/opinions-context";
+
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
+  // const { opinions } = use(OpinionsContext);  ->  destructuring the 'opinions'-object:
+  const { upvoteOpinion, downvoteOpinion } = use(OpinionsContext);
+  // -> async functions - they yeald/produce promises and create async-actions,
+  // and we must pass 'id' of the selected opinion to them, they expect 'id' as argument.
+
+  async function upvoteAction() {
+    // console.log("UPVOTE");
+    await upvoteOpinion(id);
+  }
+
+  async function downvoteAction() {
+    // console.log("DOWNVOTE");
+    await downvoteOpinion(id);
+  }
+
   return (
     <article>
       <header>
@@ -7,7 +29,8 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button>
+        <button formAction={upvoteAction}>
+          {/* we can also add formAction to buttons in React, and link different action-functions to it */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -27,7 +50,7 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
 
         <span>{votes}</span>
 
-        <button>
+        <button formAction={downvoteAction}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
